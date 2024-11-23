@@ -32,6 +32,16 @@ class Player {
         // ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.drawImage(personImage, this.x, this.y, this.width, this.height);
     } 
+
+    hitBall(ball) {
+        if (!ball.isCollidingWithPlayer(this)) {
+            return;
+        }
+
+        // Simply flip the vertical velocity
+        ball.speedY = -ball.speedY;
+        ball.speedX = -ball.speedX;
+    }
 }
 
 
@@ -75,6 +85,14 @@ class Ball {
         ctx.fillStyle = 'red';
         ctx.fill();
         ctx.closePath();
+    }
+
+    isCollidingWithPlayer(player) {
+        // Check if ball is within the player's rectangle
+        return this.x + this.radius > player.x &&
+               this.x - this.radius < player.x + player.width &&
+               this.y + this.radius > player.y &&
+               this.y - this.radius < player.y + player.height;
     }
 }
 
@@ -127,6 +145,8 @@ function gameLoop(currentTime) {
     balls.forEach((ball, index) => {
         ball.update(deltaTime);
         ball.draw(ctx);
+
+        playerOne.hitBall(ball);
         
         // Optional: Remove balls that go off screen
         if (ball.y > canvas.height || ball.x < 0 || ball.x > canvas.width) {
