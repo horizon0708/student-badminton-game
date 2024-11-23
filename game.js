@@ -34,13 +34,14 @@ class Player {
     } 
 
     hitBall(ball) {
-        if (!ball.isCollidingWithPlayer(this)) {
+        if (!ball.isCollidingWithPlayer(this) || !ball.canBeHit) {
             return;
         }
 
         // Simply flip the vertical velocity
         ball.speedY = -ball.speedY;
         ball.speedX = -ball.speedX;
+        ball.canBeHit = false;
     }
 }
 
@@ -49,6 +50,7 @@ class Ball {
     radius = 10;
     speedX = 20;
     speedY = 20;
+    canBeHit = true;
 
     constructor(x, y,speed,angle) {
         this.initialX = x;  // Store initial position
@@ -64,6 +66,7 @@ class Ball {
         this.x = this.initialX;
         this.y = this.initialY;
         this.angle = this.initialAngle * (Math.PI / 180);
+        this.canBeHit = true;
     }
 
     update(deltaTime) {
