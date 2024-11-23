@@ -99,34 +99,40 @@ var personImage2 = new Image();
 personImage2.onload = startWhenReady;
 personImage2.src = './badmintonperson2.png';
 
-
-// initialize ball here
-var ball = new Ball(canvas.width / 2, canvas.height - 100,200,10) ;
-var ball2 = new Ball(200,200,300,60);
-
+var balls = []
+var timeSinceLastSpawn = 0;
+const spawnInterval = 2000;
 
 function gameLoop(currentTime) {
     // Calculate delta time
     const deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
-    // Clear canvas
+    // Update spawn timer
+    timeSinceLastSpawn += deltaTime;
+    if (timeSinceLastSpawn >= spawnInterval) {
+        // Spawn a new ball with random angle between 45 and 75 degrees
+        const angle = Math.random() * 30 + 45;
+        const speed = Math.random() * 100 + 400; // Random speed between 400-500
+        balls.push(new Ball(10, canvas.height - 100, speed, angle));
+        timeSinceLastSpawn = 0;
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
     playerOne.update(deltaTime); 
     playerOne.draw(ctx); 
-    // Update and draw game objects
-    if(ball) {
-        // Update and draw ball
+
+    // Update and draw all balls
+    balls.forEach((ball, index) => {
         ball.update(deltaTime);
         ball.draw(ctx);
-    }
-    if(ball2) {
-        // Update and draw ball
-        ball2.update(deltaTime);
-        ball2.draw(ctx);
-    }
+        
+        // Optional: Remove balls that go off screen
+        if (ball.y > canvas.height || ball.x < 0 || ball.x > canvas.width) {
+            balls.splice(index, 1);
+        }
+    });
     
     requestAnimationFrame(gameLoop);
 }
@@ -160,7 +166,6 @@ document.addEventListener('keydown', (event) => {
         playerOne.isMovingRight = true;
         return
     }
-   
 });
 
 // when key is released
