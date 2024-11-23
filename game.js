@@ -2,8 +2,8 @@ class Player {
     x = 0 
     y = 0
     color = "green"  
-    width = 40 
-    height = 60 
+    width = 100
+    height = 100
     speed = 100
     isMovingLeft = false
     isMovingRight = false
@@ -82,7 +82,10 @@ var lastTime = 0;
 var canvas = document.getElementById('gameCanvas');
 canvas.style.border = '1px solid black';
 canvas.style.background = '#fff';
-let playerOne = new Player(300, 400); // <- add this line
+
+let playerOne = new Player(300, 400); 
+let playerTwo = new Player(100, 400); 
+
 var ctx = canvas.getContext('2d');
 var backgroundImage = new Image();
 backgroundImage.onload = startWhenReady;
