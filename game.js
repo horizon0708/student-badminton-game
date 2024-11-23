@@ -85,12 +85,17 @@ canvas.style.background = '#fff';
 let playerOne = new Player(300, 400); // <- add this line
 var ctx = canvas.getContext('2d');
 var backgroundImage = new Image();
+backgroundImage.onload = startWhenReady;
 backgroundImage.src = './backroundimage.jpeg';
-var personImage = new Image();
-personImage.src = './badmintonperson.png';
 
 var personImage = new Image();
-person2Image = './badmintonperson2.png'
+personImage.onload = startWhenReady;
+personImage.src = './badmintonperson.png';
+
+var personImage2 = new Image();
+personImage2.onload = startWhenReady;
+personImage2.src = './badmintonperson2.png';
+
 
 // initialize ball here
 var ball = new Ball(canvas.width / 2, canvas.height - 100,200,10) ;
@@ -119,19 +124,27 @@ function gameLoop(currentTime) {
         ball2.update(deltaTime);
         ball2.draw(ctx);
     }
-  
-
     
     requestAnimationFrame(gameLoop);
 }
 
 // Start the game loop
 
+// Track loaded images
+let loadedImages = 0;
+const totalImages = 3;
+
 function startGame() {
     lastTime = 0;
     requestAnimationFrame(gameLoop);
 }
 
+function startWhenReady() { 
+    loadedImages++;
+    if(loadedImages === totalImages) {
+        startGame();
+    }
+}
 
 // Set up keyboard controls
 // when key is pressed DOWN
