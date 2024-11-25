@@ -42,6 +42,8 @@ class Player {
         ball.speedY = -ball.speedY;
         ball.speedX = -ball.speedX;
         ball.canBeHit = false;
+
+        score++;
     }
 }
 
@@ -83,11 +85,13 @@ class Ball {
 
     draw(ctx) {
         // draw ball
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.closePath();
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // ctx.fillStyle = 'red';
+        // ctx.fill();
+        // ctx.closePath();
+
+        ctx.drawImage(shuttlecockImage, this.x, this.y, this.radius, this.radius);
     }
 
     isCollidingWithPlayer(player) {
@@ -120,6 +124,11 @@ var personImage2 = new Image();
 personImage2.onload = startWhenReady;
 personImage2.src = './badmintonperson2.png';
 
+var shuttlecockImage = new Image();
+shuttlecockImage.onload = startWhenReady;
+shuttlecockImage.src = './shuttlecock.png';
+
+let score = 0;
 var balls = []
 var timeSinceLastSpawn = 0;
 const spawnInterval = 2000;
@@ -156,6 +165,12 @@ function gameLoop(currentTime) {
             balls.splice(index, 1);
         }
     });
+
+    // draw score
+    ctx.fillStyle = 'white';
+    ctx.font = '24px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Score: ${score}`, 20, 40);
     
     requestAnimationFrame(gameLoop);
 }
@@ -164,7 +179,7 @@ function gameLoop(currentTime) {
 
 // Track loaded images
 let loadedImages = 0;
-const totalImages = 3;
+const totalImages = 4;
 
 function startGame() {
     lastTime = 0;
